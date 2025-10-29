@@ -1,14 +1,76 @@
 import tkinter as tk
-import colors as c
 import random
 
-#fibonacci nums for 4x4: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987
-# fibonacci cache for a 4x4 board
+# Fibonacci cache for a 4x4 board
 FIB_LIST = [1, 1]
 for i in range(2, 16):  # 4x4 = 16 tiles
     FIB_LIST.append(FIB_LIST[i - 1] + FIB_LIST[i - 2])
 FIB_SET = set(FIB_LIST)
 FIB_INDEX = {FIB_LIST[i]: i for i in range(len(FIB_LIST))}
+
+#colors and fonts for design
+GRID_COLOR = "#a39489"
+EMPTY_CELL_COLOR = "#c2b3a9"
+SCORE_LABEL_FONT = ("Verdana", 24)
+SCORE_FONT = ("Helvetica", 36, "bold")
+GAME_OVER_FONT = ("Helvetica", 48, "bold")
+GAME_OVER_FONT_COLOR = "#ffffff"
+WINNER_BG = "#ffcc00"
+LOSER_BG = "#a39489"
+
+CELL_COLORS = {
+    1: "#fcefe6",
+    2: "#f2e8cb",
+    3: "#f5b682",
+    5: "#f29446",
+    8: "#ff775c",
+    13: "#e64c2e",
+    21: "#ede291",
+    34: "#fce130",
+    55: "#ffdb4a",
+    89: "#f0b922",
+    144: "#fad74d",
+    233: "#f9a602",   
+    377: "#ff8c00",   
+    610: "#ff4500",   
+    987: "#cc0000",   
+}
+
+CELL_NUMBER_COLORS = {
+    1: "#695c57",
+    2: "#695c57",
+    3: "#ffffff",
+    5: "#ffffff",
+    8: "#ffffff",
+    13: "#ffffff",
+    21: "#ffffff",
+    34: "#ffffff",
+    55: "#ffffff",
+    89: "#ffffff",
+    144: "#ffffff",
+    233: "#ffffff",   
+    377: "#ffffff",  
+    610: "#ffffff",  
+    987: "#ffffff",
+}
+
+CELL_NUMBER_FONTS = {
+    1: ("Helvetica", 55, "bold"),
+    2: ("Helvetica", 55, "bold"),
+    3: ("Helvetica", 55, "bold"),
+    5: ("Helvetica", 55, "bold"),
+    8: ("Helvetica", 55, "bold"),
+    13: ("Helvetica", 50, "bold"),
+    21: ("Helvetica", 50, "bold"),
+    34: ("Helvetica", 50, "bold"),
+    55: ("Helvetica", 50, "bold"),
+    89: ("Helvetica", 50, "bold"),
+    144: ("Helvetica", 45, "bold"),
+    233: ("Helvetica", 45, "bold"),
+    377: ("Helvetica", 45, "bold"),
+    610: ("Helvetica", 40, "bold"),
+    987: ("Helvetica", 40, "bold")
+}
 
 class Game(tk.Frame):
     def __init__(self):
@@ -18,7 +80,7 @@ class Game(tk.Frame):
         self.master.geometry("1100x850")  # Set window size
 
         self.main_grid = tk.Frame(
-            self, bg = c.GRID_COLOR, bd=3, width = 700, height = 700
+            self, bg =  GRID_COLOR, bd=3, width = 700, height = 700
         )
         self.main_grid.grid(pady=(200,0), padx=(20,0))
         
@@ -41,12 +103,12 @@ class Game(tk.Frame):
             for j in range(4):
                 cell_frame = tk.Frame(
                     self.main_grid,
-                    bg=c.EMPTY_CELL_COLOR,
+                    bg=EMPTY_CELL_COLOR,
                     width = 170,
                     height=170
                 )
                 cell_frame.grid(row=i, column=j, padx=5, pady=5)
-                cell_number = tk.Label(self.main_grid, bg = c.EMPTY_CELL_COLOR)
+                cell_number = tk.Label(self.main_grid, bg = EMPTY_CELL_COLOR)
                 cell_number.grid(row = i, column = j)
                 
                 # Bind click events to both frame and number label
@@ -64,13 +126,13 @@ class Game(tk.Frame):
             fib_frame,
             text="Fibonacci Sequence:",
             font=("Arial", 16, "bold"),
-            fg=c.CELL_NUMBER_COLORS[1]
+            fg= CELL_NUMBER_COLORS[1]
         ).pack()
         tk.Label(
             fib_frame,
             text="1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987",
             font=("Arial", 15, "bold"),
-            fg=c.CELL_NUMBER_COLORS[1]
+            fg= CELL_NUMBER_COLORS[1]
         ).pack()
         
         #make score and difficulty buttons on the same line
@@ -84,9 +146,9 @@ class Game(tk.Frame):
             score_frame,
             text="Score",
             font=("Arial", 14, "bold"),
-            fg=c.CELL_NUMBER_COLORS[1]
+            fg= CELL_NUMBER_COLORS[1]
         ).pack()
-        self.score_label = tk.Label(score_frame, text="0", font=("Arial", 20, "bold"), fg=c.CELL_NUMBER_COLORS[1])
+        self.score_label = tk.Label(score_frame, text="0", font=("Arial", 20, "bold"), fg= CELL_NUMBER_COLORS[1])
         self.score_label.pack()
         
         # Difficulty buttons in the center
@@ -97,7 +159,7 @@ class Game(tk.Frame):
             diff_frame,
             text="Mode:",
             font=("Arial", 14, "bold"),
-            fg=c.CELL_NUMBER_COLORS[1]
+            fg= CELL_NUMBER_COLORS[1]
         ).pack()
         
         # Create difficulty buttons in a row
@@ -113,8 +175,8 @@ class Game(tk.Frame):
                 text=f"{diff.replace('_', ' ').title()}\n{target}",
                 command=lambda d=diff: self.change_difficulty(d),
                 font=("Arial", 10, "bold"),
-                bg=c.CELL_COLORS[1] if diff == self.difficulty else c.EMPTY_CELL_COLOR,
-                fg=c.CELL_NUMBER_COLORS[1],
+                bg= CELL_COLORS[1] if diff == self.difficulty else  EMPTY_CELL_COLOR,
+                fg= CELL_NUMBER_COLORS[1],
                 width=8,
                 height=2,
                 relief="raised",
@@ -132,8 +194,8 @@ class Game(tk.Frame):
             text="Restart",
             command=self.restart_game,
             font=("Arial", 14, "bold"),
-            bg=c.CELL_COLORS[2],
-            fg=c.CELL_NUMBER_COLORS[2],
+            bg= CELL_COLORS[2],
+            fg= CELL_NUMBER_COLORS[2],
             relief="raised",
             bd=3,
             width=8,
@@ -142,116 +204,47 @@ class Game(tk.Frame):
         restart_btn.pack()
 
     def start_game(self):
-        #matrix of zeros
+        # Initialize matrix with zeros
         self.matrix = [[0]*4 for _ in range(4)]
-        #fill 2 random cells with 1s
-        row = random.randint(0, 3)
-        col = random.randint(0, 3)
-        self.matrix[row][col] = 1
-        self.cells[row][col]["frame"].configure(bg=c.CELL_COLORS[1])
-        self.cells[row][col]["number"].configure(
-            bg=c.CELL_COLORS[1],
-            fg=c.CELL_NUMBER_COLORS[1],
-            font=c.CELL_NUMBER_FONTS[1],
-            text="1"
-        )
-        while(self.matrix[row][col]!=0):
-            row = random.randint(0,3)
-            col = random.randint(0,3)
-        self.matrix[row][col] = 2
-        self.cells[row][col]["frame"].configure(bg=c.CELL_COLORS[2])
-        self.cells[row][col]["number"].configure(
-            bg=c.CELL_COLORS[2],
-            fg=c.CELL_NUMBER_COLORS[2],
-            font=c.CELL_NUMBER_FONTS[2],
-            text="2"
-        )
+        
+        # Fill grid with 15 starting tiles (leaving 1 empty)
+        starting_tiles = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 8, 8, 13]
+        
+        # Get all positions and shuffle
+        positions = [(i, j) for i in range(4) for j in range(4)]
+        random.shuffle(positions)
+        
+        # Place the starting tiles
+        for idx, value in enumerate(starting_tiles):
+            row, col = positions[idx]
+            self.matrix[row][col] = value
+            self.cells[row][col]["frame"].configure(bg= CELL_COLORS[value])
+            self.cells[row][col]["number"].configure(
+                bg= CELL_COLORS[value],
+                fg= CELL_NUMBER_COLORS[value],
+                font= CELL_NUMBER_FONTS[value],
+                text=str(value)
+            )
 
         self.score = 0
         self.selection_count = 0
         self.selected_tiles = []
         self.target_fib = self.get_target_fib()
-
-    def stack(self):
-        new_matrix = [[0]*4 for _ in range(4)]
-        for i in range(4):
-            fill_position = 0
-            for j in range(4):
-                if self.matrix[i][j] != 0:
-                    new_matrix[i][fill_position] = self.matrix[i][j]
-                    fill_position +=1
-        self.matrix = new_matrix
-    #all numbers slide left, and all zeros move to the right.
-
-    def combine(self):
-        for i in range(4):
-            new_row, hold = [], -1
-            for val in self.matrix[i]:
-                if not val: 
-                    continue
-                if hold == -1:
-                    hold = val
-                elif abs(FIB_INDEX[hold] - FIB_INDEX[val]) == 1 and (hold + val) in FIB_SET:
-                    new_row.append(hold + val)
-                    self.score += hold + val
-                    hold = -1
-                else:
-                    new_row.append(hold)
-                    hold = val
-            if hold != -1:
-                new_row.append(hold)
-            while len(new_row) < 4:
-                new_row.append(0)
-            self.matrix[i] = new_row
-    #combines consecutive fibonacci nums
-
-    def reverse(self):
-        new_matrix = []
-        for i in range(4):
-            new_matrix.append([])
-            for j in range(4):
-                new_matrix[i].append(self.matrix[i][3-j])
-        self.matrix = new_matrix
-
-    def transpose(self):
-        new_matrix = [[0]*4 for _ in range(4)]
-        for i in range(4):
-            for j in range(4):
-                new_matrix[i][j] = self.matrix[j][i]
-        self.matrix = new_matrix
-
-    def add_new_tile(self):
-        empty_cells = [(i, j) for i in range(4) for j in range(4) if self.matrix[i][j] == 0]
-        if not empty_cells:
-            return  # no empty cells, don't add
-        row, col = random.choice(empty_cells)
-
-        # randomly choose 1 or 2 (like start_game)
-        new_value = random.choice([1, 2])
-        self.matrix[row][col] = new_value
-
-        self.cells[row][col]["frame"].configure(bg=c.CELL_COLORS[new_value])
-        self.cells[row][col]["number"].configure(
-            bg=c.CELL_COLORS[new_value],
-            fg=c.CELL_NUMBER_COLORS[new_value],
-            font=c.CELL_NUMBER_FONTS[new_value],
-            text=str(new_value)
-        )
-    #adding new tile randomly to empty cell
+        self.update_GUI()
 
     def update_GUI(self):
         for i in range(4):
             for j in range(4):
                 cell_value = self.matrix[i][j]
                 if cell_value == 0:
-                    self.cells[i][j]["frame"].configure(bg=c.EMPTY_CELL_COLOR)
-                    self.cells[i][j]["number"].configure(bg=c.EMPTY_CELL_COLOR, text="")
+                    self.cells[i][j]["frame"].configure(bg= EMPTY_CELL_COLOR)
+                    self.cells[i][j]["number"].configure(bg= EMPTY_CELL_COLOR, text="")
                 else:
-                    self.cells[i][j]["frame"].configure(bg=c.CELL_COLORS[cell_value])
+                    self.cells[i][j]["frame"].configure(bg= CELL_COLORS[cell_value])
                     self.cells[i][j]["number"].configure(
-                        bg=c.CELL_COLORS[cell_value],
-                        fg=c.CELL_NUMBER_COLORS[cell_value],
-                        font=c.CELL_NUMBER_FONTS[cell_value],
+                        bg= CELL_COLORS[cell_value],
+                        fg= CELL_NUMBER_COLORS[cell_value],
+                        font= CELL_NUMBER_FONTS[cell_value],
                         text=str(cell_value)
                     )
         self.score_label.configure(text=self.score)
@@ -325,20 +318,14 @@ class Game(tk.Frame):
             # Clear selection
             self.clear_selection()
             
-            # Add a new tile
-            self.add_new_tile()
-            
-            # Update display
+            # Update display (NO new tiles added!)
             self.update_GUI()
             
             # Check game over
             self.game_over()
         else:
-            # Merge failed: clear selection, then spawn a new tile (1 or 2)
+            # Merge failed: just clear selection (NO new tiles added!)
             self.clear_selection()
-            self.add_new_tile()
-            self.update_GUI()
-            self.game_over()
             
     def can_merge(self, val1, val2):
         """Check if two values can be merged (consecutive Fibonacci numbers)"""
@@ -369,9 +356,9 @@ class Game(tk.Frame):
         # Update button colors
         for diff, btn in self.diff_buttons.items():
             if diff == difficulty:
-                btn.configure(bg=c.CELL_COLORS[1])
+                btn.configure(bg= CELL_COLORS[1])
             else:
-                btn.configure(bg=c.EMPTY_CELL_COLOR)
+                btn.configure(bg= EMPTY_CELL_COLOR)
     
     def restart_game(self):
         """Restart the game"""
@@ -381,10 +368,8 @@ class Game(tk.Frame):
                 if isinstance(label, tk.Label) and label.cget("text") in ("You Win!", "Game Over!"):
                     widget.destroy()
         self.start_game()
-        self.update_GUI()
         self.clear_selection()
 
-    #check if any moves are possible (anywhere on the board)
     def any_move_exists(self):
         """Check if any two tiles can be merged anywhere on the board"""
         # Get all non-zero tiles
@@ -392,38 +377,40 @@ class Game(tk.Frame):
         for i in range(4):
             for j in range(4):
                 if self.matrix[i][j] != 0:
-                    tiles.append((i, j, self.matrix[i][j]))
+                    tiles.append(self.matrix[i][j])
+        
+        # Need at least 2 tiles to have a move
+        if len(tiles) < 2:
+            return False
         
         # Check all possible pairs
         for i in range(len(tiles)):
             for j in range(i + 1, len(tiles)):
-                _, _, val1 = tiles[i]
-                _, _, val2 = tiles[j]
-                if self.can_merge(val1, val2):
+                if self.can_merge(tiles[i], tiles[j]):
                     return True
         return False
 
-    #check is game is over and if win/lose
     def game_over(self):
+        """Check if game is over and if win/lose"""
         if any(self.target_fib in row for row in self.matrix):
             game_over_frame = tk.Frame(self.main_grid, borderwidth=2)
             game_over_frame.place(relx=0.5, rely=0.5, anchor = "center")
             tk.Label(
                 game_over_frame,
                 text="You Win!",
-                bg = c.WINNER_BG,
-                fg = c.GAME_OVER_FONT_COLOR,
-                font = c.GAME_OVER_FONT
+                bg =  WINNER_BG,
+                fg =  GAME_OVER_FONT_COLOR,
+                font =  GAME_OVER_FONT
             ).pack()
-        elif not any(0 in row for row in self.matrix) and not self.any_move_exists():
+        elif not self.any_move_exists():
             game_over_frame = tk.Frame(self.main_grid, borderwidth=2)
             game_over_frame.place(relx=0.5, rely=0.5, anchor = "center")
             tk.Label(
                 game_over_frame,
                 text="Game Over!",
-                bg = c.LOSER_BG,
-                fg = c.GAME_OVER_FONT_COLOR,
-                font = c.GAME_OVER_FONT
+                bg =  LOSER_BG,
+                fg =  GAME_OVER_FONT_COLOR,
+                font =  GAME_OVER_FONT
             ).pack()
 
 def main():
