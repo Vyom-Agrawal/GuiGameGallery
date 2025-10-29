@@ -208,7 +208,17 @@ class Game(tk.Frame):
         self.matrix = [[0]*4 for _ in range(4)]
         
         # Fill grid with 15 starting tiles (leaving 1 empty)
-        starting_tiles = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 8, 8, 13]
+        #starting_tiles = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 8, 8, 13]
+
+        if self.difficulty == "easy":
+            starting_tiles = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 5, 5, 8, 8, 13]
+        elif self.difficulty == "medium":
+            starting_tiles = [1, 1, 2, 2, 3, 3, 5, 5, 8, 8, 13, 13, 21, 21, 34]
+        elif self.difficulty == "hard":
+            starting_tiles = [2, 3, 5, 5, 8, 8, 13, 13, 21, 21, 34, 34, 55, 55, 89]
+        else:  # super_hard
+            starting_tiles = [5, 8, 13, 13, 21, 21, 34, 34, 55, 55, 89, 89, 144, 144, 233]
+        
         
         # Get all positions and shuffle
         positions = [(i, j) for i in range(4) for j in range(4)]
