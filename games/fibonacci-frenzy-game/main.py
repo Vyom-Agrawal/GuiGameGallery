@@ -77,7 +77,7 @@ class Game(tk.Frame):
         tk.Frame.__init__(self)
         self.grid()
         self.master.title("Fibonacci Frenzy - Click to Merge!")
-        self.master.geometry("1100x850")  # Set window size
+        self.master.geometry("650x825")  # Set window size
 
         self.main_grid = tk.Frame(
             self, bg =  GRID_COLOR, bd=3, width = 700, height = 700
@@ -104,8 +104,8 @@ class Game(tk.Frame):
                 cell_frame = tk.Frame(
                     self.main_grid,
                     bg=EMPTY_CELL_COLOR,
-                    width = 170,
-                    height=170
+                    width = 140,
+                    height=140
                 )
                 cell_frame.grid(row=i, column=j, padx=5, pady=5)
                 cell_number = tk.Label(self.main_grid, bg = EMPTY_CELL_COLOR)
